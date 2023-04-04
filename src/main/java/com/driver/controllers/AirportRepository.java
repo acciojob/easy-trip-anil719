@@ -94,7 +94,7 @@ public class AirportRepository {
             fare = noOfBookings*50 + 3000;
         }
         else if(flightMap.containsKey(flightId)){
-            fare = 3000;                                // just checking  price
+            fare = 3000;                                //c
         }
         return fare;
     }
@@ -104,18 +104,19 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
-        if(!flightToPassenger.containsKey(flightId)) return "FAILURE";
 
-        int totalBookings = flightToPassenger.get(flightId).size();
-        Flight flight = flightMap.get(flightId);
-        if(totalBookings > flight.getMaxCapacity()) return "FAILURE";
-        else if(flightToPassenger.get(flightId).contains(passengerId)) return "FAILURE" ;
-        else{
-            List<Integer> passengers = flightToPassenger.get(flightId);
-            passengers.add(passengerId);
-            flightToPassenger.put(flightId, passengers);
+        if(flightToPassenger.containsKey(flightId)){
+            int noOfBookings = flightToPassenger.get(flightId).size();
+            if(noOfBookings > flightMap.get(flightId).getMaxCapacity()) return "FAILURE";
+            else if(flightToPassenger.get(flightId).contains(passengerId)) return "FAILURE";
+            else{
+                List<Integer> list = flightToPassenger.get(flightId);
+                list.add(passengerId);
+                flightToPassenger.put(flightId, list);
+                return "SUCCESS";
+            }
         }
-        return "SUCCESS";
+        return "FAILURE";
     }
 
     public String cancelATicket(Integer flightId, Integer passengerId){
@@ -172,7 +173,8 @@ public class AirportRepository {
         int revenue = 0;
         int noOfBookings = 0;
         if(flightToPassenger.containsKey(flightId)){
-            noOfBookings = flightToPassenger.get(flightId).size();
+            List<Integer> passengers = flightToPassenger.get(flightId);
+            noOfBookings = passengers.size();
         }
         //using AP for Total Revenue  --> sn = n/2* (2 * a + (n - 1) * d)
 
