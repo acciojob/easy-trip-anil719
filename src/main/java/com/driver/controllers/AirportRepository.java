@@ -33,31 +33,20 @@ public class AirportRepository {
     public String getLargestAirportName(){
         //Largest airport is in terms of terminals. 3 terminal airport is larger than 2 terminal airport
         //Incase of a tie return the Lexicographically smallest airportName
+        String ans = "";
         int noOfTerminals = 0;
         for(Airport airport : airportMap.values()){
-            noOfTerminals = Math.max(noOfTerminals, airport.getNoOfTerminals());
-        }
-        int terminalCountForTie = 0;
-
-        for(Airport airport : airportMap.values()){
-            if(airport.getNoOfTerminals() == noOfTerminals) terminalCountForTie ++;
-        }
-        if(terminalCountForTie == 1){
-            for(Airport airport : airportMap.values()){
-                if(airport.getNoOfTerminals() == noOfTerminals) return airport.getAirportName();
+            if(airport.getNoOfTerminals() > noOfTerminals){
+                ans = airport.getAirportName();
+                noOfTerminals = airport.getNoOfTerminals();
             }
-        }
-        else{
-            List<String> airportName = new ArrayList<>();
-            for(Airport airport : airportMap.values()){
-                if(airport.getNoOfTerminals() == terminalCountForTie){
-                    airportName.add(airport.getAirportName());
+            else if(airport.getNoOfTerminals() == noOfTerminals){
+                if(airport.getAirportName().compareTo(ans) < 0){
+                    ans = airport.getAirportName();
                 }
             }
-            Collections.sort(airportName);
-            return airportName.get(0);
         }
-        return null;
+        return ans;
     }
 
     public double getShortestDurationOfPossibleBetweenTwoCities(City fromCity, City toCity){
@@ -108,7 +97,7 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
-        if(!flightToPassenger.containsKey(flightId)) return "FAILUE";
+        if(!flightToPassenger.containsKey(flightId)) return "FAILURE";
 
         int totalBookings = flightToPassenger.get(flightId).size();
         Flight flight = flightMap.get(flightId);
@@ -127,12 +116,17 @@ public class AirportRepository {
         // then return a "FAILURE" message
         // Otherwise return a "SUCCESS" message
         // and also cancel the ticket that passenger had booked earlier on the given flightId
-        if(!flightToPassenger.containsKey(flightId) || flightToPassenger.get(flightId).contains(passengerId) == false) return "FAILURE";
 
         List<Integer> bookedPassengerIds = flightToPassenger.get(flightId);
-        bookedPassengerIds.remove(passengerId);
-        flightToPassenger.put(flightId, bookedPassengerIds);
-        return "SUCCESS";
+        if(bookedPassengerIds == null) return "FAILURE";
+
+        if(bookedPassengerIds.contains(passengerId)) {
+            bookedPassengerIds.remove(passengerId);
+            flightToPassenger.put(flightId, bookedPassengerIds);
+            return "SUCCESS";
+        }
+
+        return "FAILURE";
     }
 
     public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId){
@@ -159,7 +153,7 @@ public class AirportRepository {
             for(Airport airport : airportMap.values()){
                 if(airport.getCity() == city) return airport.getAirportName();
             }
-            return "null" ;
+
         }
         return null;
     }

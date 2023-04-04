@@ -12,6 +12,7 @@ import java.util.Date;
 public class AirportService {
     AirportRepository airportRepository = new AirportRepository();
     public void addAirport(Airport airport){
+
         airportRepository.addAirport(airport);
     }
 
@@ -28,6 +29,7 @@ public class AirportService {
     }
 
     public int calculateFlightFare(Integer flightId){
+
         return airportRepository.calculateFlightFare(flightId);
     }
 
@@ -44,6 +46,7 @@ public class AirportService {
     }
 
     public String addFlight(Flight flight){
+
         return airportRepository.addFlight(flight);
     }
 
@@ -56,6 +59,7 @@ public class AirportService {
     }
 
     public String addPassenger(Passenger passenger){
+
         return airportRepository.addPassenger(passenger);
     }
 
