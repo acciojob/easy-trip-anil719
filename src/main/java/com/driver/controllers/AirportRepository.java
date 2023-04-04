@@ -73,7 +73,7 @@ public class AirportRepository {
         int count = 0;
         for(Flight flight : flightMap.values()){
             if(date.equals(flight.getFlightDate())){
-                if(flight.getFromCity().equals(city) || flight.getToCity().equals(city)){
+                if(flight.getToCity().equals(city)||flight.getFromCity().equals(city) ){
                     int flightId = flight.getFlightId();
                     count += flightToPassenger.get(flightId).size();
                 }
@@ -88,8 +88,15 @@ public class AirportRepository {
         //Price for any flight will be : 3000 + noOfPeopleWhoHaveAlreadyBooked*50
         //Suppose if 2 people have booked the flight already : the price of flight for the third person will be 3000 + 2*50 = 3100
         //This will not include the current person who is trying to book, he might also be just checking price
-        int totalBookings = flightToPassenger.get(flightId).size();
-        return totalBookings * 50 + 3000 ;
+        int fare = 0;
+        if(flightMap.containsKey(flightId)){
+            int noOfBookings = flightToPassenger.get(flightId).size();
+            fare = noOfBookings*50 + 3000;
+        }
+        else if(flightMap.containsKey(flightId)){
+            fare = 3000;                                // just checking  price
+        }
+        return fare;
     }
 
     public String bookATicket(Integer flightId, Integer passengerId){
@@ -162,12 +169,19 @@ public class AirportRepository {
         //Calculate the total revenue that a flight could have
         //That is of all the passengers that have booked a flight till now and then calculate the revenue
         //Revenue will also decrease if some passenger cancels the flight
+        int revenue = 0;
+        int noOfBookings = 0;
+        if(flightToPassenger.containsKey(flightId)){
+            noOfBookings = flightToPassenger.get(flightId).size();
+        }
+        //using AP for Total Revenue  --> sn = n/2* (2 * a + (n - 1) * d)
 
-        int totalBookings = flightToPassenger.get(flightId).size();
-        int variableFare = (totalBookings*totalBookings+1)*25;
-        int fixedFare = 3000* totalBookings;
-        int totalFare = variableFare + fixedFare;
-        return totalFare;
+        int n = noOfBookings;
+        int first = 3000;
+        int diff = 50;
+        revenue = (n/2) * (2 * first + (n-1) * diff) ;
+        return revenue;
+
     }
 
     public String addPassenger(Passenger passenger){
