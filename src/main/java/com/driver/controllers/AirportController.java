@@ -67,7 +67,7 @@ public class AirportController {
         //This will not include the current person who is trying to book, he might also be just checking price
 
         int fare = airportService.calculateFlightFare(flightId);
-       return 0;
+       return fare;
 
     }
 
@@ -80,7 +80,7 @@ public class AirportController {
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
         String res = airportService.bookATicket(flightId, passengerId);
-        return null;
+        return res;
     }
 
     @PutMapping("/cancel-a-ticket")
@@ -91,7 +91,7 @@ public class AirportController {
         // Otherwise return a "SUCCESS" message
         // and also cancel the ticket that passenger had booked earlier on the given flightId
         String res = airportService.cancelATicket(flightId, passengerId);
-       return null;
+       return res;
     }
 
 
@@ -118,7 +118,7 @@ public class AirportController {
         //We need to get the starting airportName from where the flight will be taking off (Hint think of City variable if that can be of some use)
         //return null incase the flightId is invalid or you are not able to find the airportName
         String res = airportService.getAirportNameFromFlightId(flightId);
-        return null;
+        return res;
     }
 
 
@@ -130,7 +130,7 @@ public class AirportController {
         //Revenue will also decrease if some passenger cancels the flight
 
         int res = airportService.calculateRevenueOfAFlight(flightId);
-        return 0;
+        return res;
     }
 
 
@@ -140,7 +140,7 @@ public class AirportController {
         //Add a passenger to the database
         //And return a "SUCCESS" message if the passenger has been added successfully.
         String res = airportService.addPassenger(passenger);
-       return null;
+       return res;
     }
 
 
