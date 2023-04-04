@@ -104,19 +104,36 @@ public class AirportRepository {
         //return a String "FAILURE"
         //Also if the passenger has already booked a flight then also return "FAILURE".
         //else if you are able to book a ticket then return "SUCCESS"
-
         if(flightToPassenger.containsKey(flightId)){
-            int noOfBookings = flightToPassenger.get(flightId).size();
-            if(noOfBookings > flightMap.get(flightId).getMaxCapacity()) return "FAILURE";
-            else if(flightToPassenger.get(flightId).contains(passengerId)) return "FAILURE";
-            else{
-                List<Integer> list = flightToPassenger.get(flightId);
-                list.add(passengerId);
-                flightToPassenger.put(flightId, list);
-                return "SUCCESS";
+            List<Integer> bookings = flightToPassenger.get(flightId);
+            if(bookings.size() > flightMap.get(flightId).getMaxCapacity()){
+                return "FAILURE";
             }
+            if(bookings.contains(passengerId)) return "FAILURE";
+
+            bookings.add(passengerId);
+            flightToPassenger.put(flightId, bookings);
+            return "SUCCESS";
+
         }
-        return "FAILURE";
+        else {
+            List<Integer> passengers = new ArrayList<>();
+            passengers.add(passengerId);
+            flightToPassenger.put(flightId, passengers);
+            return "SUCCESS";
+        }
+//        if(flightToPassenger.containsKey(flightId)){
+//            int noOfBookings = flightToPassenger.get(flightId).size();
+//            if(noOfBookings > flightMap.get(flightId).getMaxCapacity()) return "FAILURE";
+//            else if(flightToPassenger.get(flightId).contains(passengerId)) return "FAILURE";
+//            else if(){
+//                List<Integer> list = flightToPassenger.get(flightId);
+//                list.add(passengerId);
+//                flightToPassenger.put(flightId, list);
+//                return "SUCCESS";
+//            }
+//        }
+//        return "FAILURE";
     }
 
     public String cancelATicket(Integer flightId, Integer passengerId){
